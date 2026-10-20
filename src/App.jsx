@@ -119,11 +119,11 @@ export default function App() {
   return (
     <>
       <h1>Time Tracker</h1>
+      <div id="total">{fmt(total)} available </div>
       <div id="scene">
         <div>
           <SmallJar src={`${BASE}assets/small-jar.svg`} onGrab={startDrag} scale={scale} />
         </div>
-        <div id="total">{fmt(total)} available </div>
         <div ref={bigBox}>
           <Jar ref={bigJar} className="jar-big" src={`${BASE}/assets/thick-jar.svg`} 
           leftSide={BIG_LEFT} onGrab={startDrag} 
