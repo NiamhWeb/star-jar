@@ -1,0 +1,41 @@
+#scene {
+  display: flex;
+  gap: 2vw;
+  padding-left: 6vw;
+  justify-content: flex-start;
+  align-items: flex-end;
+  height: 80vh;
+}
+
+.jar-wrap { position: relative; }
+.jar-wrap img { display: block; width: auto; }
+.jar-wrap canvas { position: absolute; top: 0; left: 0; }
+
+.jar-small img { height: 35vh; }
+.jar-big img   { height: 50vh; }
+
+#star { height: 8vh; width: auto; }
+
+.jar-wrap canvas { touch-action: none; }   /* stops phone scrolling stealing the drag */
+
+.dispenser-star {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  text-align: center;
+  font-size: 11px;
+}
+.dispenser-star span { display: block; }
+
+.ghost {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;   /* so it never blocks the pointer events underneath */
+  z-index: 10;
+}
+
+#total { align-self: center; font-size: 1.4rem; }
+
+body.dragging, body.dragging * { cursor: grabbing !important; }
