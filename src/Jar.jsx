@@ -9,8 +9,7 @@ const TEX = 300;
 
 const textureCache = {};
 function starTexture(color) {
-  if (!textureCache[color]) {
-    const svg = 
+  if (!textureCache[color]) { 
     textureCache[color] = 'data:image/svg+xml;utf8,' + encodeURIComponent(starSvg(color, TEX));
   }
   return textureCache[color];
@@ -34,7 +33,7 @@ function wallFromPoints(points, W, H, thickness = 24) {
   return walls;
 }
 
-const Jar = forwardRef(function jar({ className, src, leftSide, onGrab, onStarsChange, initialStars = [], debug = false }, ref) {
+const Jar = forwardRef(function Jar({ className, src, leftSide, onGrab, onStarsChange, initialStars = [], debug = false }, ref) {
   const imgRef = useRef(null);
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
@@ -61,6 +60,7 @@ const Jar = forwardRef(function jar({ className, src, leftSide, onGrab, onStarsC
   }
 
   function spawnBody(star, preferredFx = 0.5) {
+    if (!starRef.current.has(star.id)) return;
     const engine = engineRef.current;
     const canvas = canvasRef.current;
     if (!engine || !canvas) return;
@@ -82,7 +82,7 @@ const Jar = forwardRef(function jar({ className, src, leftSide, onGrab, onStarsC
         render: {
           sprite: {
             texture: starTexture(type.color),
-            xScale: (r * 2) / TEX,   // the image is 200px wide
+            xScale: (r * 2) / TEX, 
             yScale: (r * 2) / TEX,
           },
         },
@@ -100,6 +100,15 @@ const Jar = forwardRef(function jar({ className, src, leftSide, onGrab, onStarsC
       spawnBody(star, preferredFx);
       reportStars();
     },
+    clearStars() {
+      const engine = engineRef.current;
+      if (engine) {
+        const bodies = Composite.allBodies(engine.world).filter((b) => b.starType);
+        Composite.remove(engine.world, bodies);
+      }
+      starRef.current.clear();
+      reportStars();
+    }
   }), [leftSide]);
   
   useEffect(() => {

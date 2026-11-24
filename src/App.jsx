@@ -16,17 +16,6 @@ const BIG_LEFT = [
   [0.502, 0.995],
 ];
 
-//if change to small jar to a boundry one
-// const SMALL_LEFT = [
-//   [0.084, 0.071],
-//   [0.072, 0.147],
-//   [0.020, 0.257],
-//   [0.018, 0.807],
-//   [0.100, 0.930],
-//   [0.263, 0.973],
-//   [0.482, 0.983],
-// ];
-
 const STORAGE_KEY = 'starV1'
 
 const fmt = (m) => `${Math.floor(m / 60)}h ${m % 60}m`;
@@ -63,10 +52,16 @@ export default function App() {
   }, [total, log, stars]);
 
   function change(minutes) {
-    // setTotal((t) => t + minutes);
-    // localStorage.setItem()
     setLog((l) => [...l, { time: Date.now(), minutes, note: '' }]);
   }
+
+  function clearAll() {
+    if (!window.confirm('Remove all stars from jar?')) return;
+    const removed = stars.reduce((sum, m) => sum + m, 0);
+    bigJar.current.clearStars();
+    if (removed > 0) change(-removed);
+  }
+
   function startDrag(type, e, from) {
     dragRef.current = { type, from };
     setGhost({ type, x: e.clientX, y: e.clientY });
@@ -119,13 +114,16 @@ export default function App() {
   return (
     <>
       <h1>Time Tracker</h1>
-      <div id="total">{fmt(total)} available </div>
+      <div id="total">
+        <span>{fmt(total)} available </span>
+        <button onClick={clearAll}>Clear all</button>
+      </div>
       <div id="scene">
         <div>
           <SmallJar src={`${BASE}assets/small-jar.svg`} onGrab={startDrag} scale={scale} />
         </div>
         <div ref={bigBox}>
-          <Jar ref={bigJar} className="jar-big" src={`${BASE}/assets/thick-jar.svg`} 
+          <Jar ref={bigJar} className="jar-big" src={`${BASE}assets/thick-jar.svg`} 
           leftSide={BIG_LEFT} onGrab={startDrag} 
           initialStars={saved.stars} onStarsChange={setStars}/>
         </div>
